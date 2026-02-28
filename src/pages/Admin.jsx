@@ -121,18 +121,18 @@ export default function Admin() {
 const css = `@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }`;
 
 const s = {
-    root: { fontFamily: "'DM Sans', sans-serif", backgroundColor: '#f8f7f4', minHeight: '100vh' },
+    root: { fontFamily: "'Inter', sans-serif", backgroundColor: '#f8f7f4', minHeight: '100vh' },
     nav: { position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(248,247,244,0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #e8e5df' },
     navInner: { maxWidth: '1280px', margin: '0 auto', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-    logo: { fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '1.3rem', color: '#111', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' },
+    logo: { fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '1.3rem', color: '#111', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' },
     logoDot: { color: '#e8633a' },
     adminBadge: { backgroundColor: '#e8633a', color: '#fff', padding: '0.3rem 1rem', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 700 },
     navLink: { color: '#555', textDecoration: 'none', fontSize: '0.95rem' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: '4rem 2rem' },
-    title: { fontFamily: "'Syne', sans-serif", fontSize: '2.5rem', fontWeight: 800, marginBottom: '2.5rem' },
+    title: { fontFamily: "'Outfit', sans-serif", fontSize: '2.5rem', fontWeight: 700, marginBottom: '2.5rem' },
     grid: { display: 'grid', gridTemplateColumns: '400px 1fr', gap: '2rem', alignItems: 'start' },
     card: { backgroundColor: '#fff', borderRadius: '16px', padding: '1.5rem', border: '1px solid #eee' },
-    cardTitle: { fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '1.2rem', marginBottom: '1.5rem' },
+    cardTitle: { fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '1.2rem', marginBottom: '1.5rem' },
     successMsg: { backgroundColor: '#dcfce7', color: '#16a34a', padding: '0.8rem 1rem', borderRadius: '8px', fontSize: '0.9rem', marginBottom: '1rem' },
     field: { marginBottom: '1rem' },
     label: { display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#555', marginBottom: '0.4rem' },

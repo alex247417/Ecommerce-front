@@ -148,7 +148,7 @@ export default function Home() {
 }
 
 const css = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
   .orb { animation: pulse 6s ease-in-out infinite; }
   .orb2 { animation: pulse 8s ease-in-out infinite reverse; }
@@ -182,7 +182,7 @@ const css = `
 
 const s = {
     root: {
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         backgroundColor: '#f8f7f4',
         minHeight: '100vh',
         color: '#111',
@@ -204,8 +204,8 @@ const s = {
         alignItems: 'center',
     },
     logo: {
-        fontFamily: "'Syne', sans-serif",
-        fontWeight: 800,
+        fontFamily: "'Outfit', sans-serif",
+        fontWeight: 700,
         fontSize: '1.4rem',
         letterSpacing: '0.05em',
         color: '#111',
@@ -224,6 +224,7 @@ const s = {
         borderRadius: '20px',
         fontSize: '0.8rem',
         fontWeight: 600,
+        letterSpacing: '0.02em',
         textDecoration: 'none',
     },
     ctaBtn: {
@@ -261,9 +262,9 @@ const s = {
         marginBottom: '1rem',
     },
     heroTitle: {
-        fontFamily: "'Syne', sans-serif",
+        fontFamily: "'Outfit', sans-serif",
         fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-        fontWeight: 800,
+        fontWeight: 700,
         color: '#fff',
         lineHeight: 1.1,
         marginBottom: '1.5rem',
@@ -277,7 +278,8 @@ const s = {
         padding: '0.9rem 2.5rem',
         borderRadius: '50px',
         textDecoration: 'none',
-        fontWeight: 600,
+        fontWeight: 500,
+        letterSpacing: '0.02em',
         fontSize: '1rem',
         transition: 'transform 0.2s',
     },
@@ -311,9 +313,9 @@ const s = {
         gap: '1rem',
     },
     sectionTitle: {
-        fontFamily: "'Syne', sans-serif",
+        fontFamily: "'Outfit', sans-serif",
         fontSize: '2rem',
-        fontWeight: 800,
+        fontWeight: 700,
     },
     searchInput: {
         padding: '0.6rem 1.2rem',
@@ -367,7 +369,7 @@ const s = {
         marginBottom: '0.3rem',
     },
     cardName: {
-        fontFamily: "'Syne', sans-serif",
+        fontFamily: "'Outfit', sans-serif",
         fontSize: '1.15rem',
         fontWeight: 700,
         marginBottom: '0.4rem',
@@ -408,8 +410,8 @@ const s = {
         textAlign: 'center',
     },
     footerLogo: {
-        fontFamily: "'Syne', sans-serif",
-        fontWeight: 800,
+        fontFamily: "'Outfit', sans-serif",
+        fontWeight: 700,
         fontSize: '1rem',
         color: '#e8633a',
         display: 'block',
