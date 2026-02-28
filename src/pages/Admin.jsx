@@ -6,6 +6,7 @@ import api from '../services/api';
 export default function Admin() {
     const [products, setProducts] = useState([]);
     const [form, setForm] = useState({ nome: '', descricao: '', preco: '', estoque: '', imagemUrl: '' });
+    const [editingId, setEditingId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState('');
     const { user } = useAuth();
@@ -21,17 +22,41 @@ export default function Admin() {
         setProducts(res.data);
     }
 
+    function startEdit(product) {
+        setEditingId(product.id);
+        setForm({
+            nome: product.nome,
+            descricao: product.descricao,
+            preco: product.preco,
+            estoque: product.estoque,
+            imagemUrl: product.imagemUrl,
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelEdit() {
+        setEditingId(null);
+        setForm({ nome: '', descricao: '', preco: '', estoque: '', imagemUrl: '' });
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
         try {
-            await api.post('/products', { ...form, preco: parseFloat(form.preco), estoque: parseInt(form.estoque) });
+            const payload = { ...form, preco: parseFloat(form.preco), estoque: parseInt(form.estoque) };
+            if (editingId) {
+                await api.put(`/products/${editingId}`, payload);
+                setSuccess('Produto atualizado com sucesso!');
+            } else {
+                await api.post('/products', payload);
+                setSuccess('Produto cadastrado com sucesso!');
+            }
             setForm({ nome: '', descricao: '', preco: '', estoque: '', imagemUrl: '' });
-            setSuccess('Produto cadastrado com sucesso!');
+            setEditingId(null);
             setTimeout(() => setSuccess(''), 3000);
             loadProducts();
         } catch {
-            alert('Erro ao cadastrar produto.');
+            alert('Erro ao salvar produto.');
         } finally {
             setLoading(false);
         }
@@ -45,8 +70,6 @@ export default function Admin() {
 
     return (
         <div style={s.root}>
-            <style>{css}</style>
-
             <nav style={s.nav}>
                 <div style={s.navInner}>
                     <Link to="/" style={s.logo}><span style={s.logoDot}>◆</span> NEXSHOP</Link>
@@ -61,7 +84,9 @@ export default function Admin() {
                 <div style={s.grid}>
                     {/* FORMULÁRIO */}
                     <div style={s.card}>
-                        <h2 style={s.cardTitle}>Novo Produto</h2>
+                        <h2 style={s.cardTitle}>
+                            {editingId ? `Editando produto #${editingId}` : 'Novo Produto'}
+                        </h2>
 
                         {success && <div style={s.successMsg}>{success}</div>}
 
@@ -85,9 +110,17 @@ export default function Admin() {
                                     />
                                 </div>
                             ))}
-                            <button type="submit" style={s.submitBtn} disabled={loading}>
-                                {loading ? 'Cadastrando...' : '+ Cadastrar produto'}
-                            </button>
+
+                            <div style={{ display: 'flex', gap: '0.8rem' }}>
+                                <button type="submit" style={s.submitBtn} disabled={loading}>
+                                    {loading ? 'Salvando...' : editingId ? '✓ Salvar alterações' : '+ Cadastrar produto'}
+                                </button>
+                                {editingId && (
+                                    <button type="button" style={s.cancelBtn} onClick={cancelEdit}>
+                                        Cancelar
+                                    </button>
+                                )}
+                            </div>
                         </form>
                     </div>
 
@@ -107,7 +140,10 @@ export default function Admin() {
                                         <p style={s.productName}>{p.nome}</p>
                                         <p style={s.productMeta}>R$ {p.preco.toFixed(2)} · {p.estoque} em estoque</p>
                                     </div>
-                                    <button style={s.deleteBtn} onClick={() => handleDelete(p.id)}>✕</button>
+                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                        <button style={s.editBtn} onClick={() => startEdit(p)}>✏️</button>
+                                        <button style={s.deleteBtn} onClick={() => handleDelete(p.id)}>✕</button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -118,15 +154,13 @@ export default function Admin() {
     );
 }
 
-const css = `@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }`;
-
 const s = {
     root: { fontFamily: "'Inter', sans-serif", backgroundColor: '#f8f7f4', minHeight: '100vh' },
     nav: { position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(248,247,244,0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #e8e5df' },
     navInner: { maxWidth: '1280px', margin: '0 auto', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     logo: { fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '1.3rem', color: '#111', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' },
     logoDot: { color: '#e8633a' },
-    adminBadge: { backgroundColor: '#e8633a', color: '#fff', padding: '0.3rem 1rem', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 700 },
+    adminBadge: { backgroundColor: '#e8633a', color: '#fff', padding: '0.3rem 1rem', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 600 },
     navLink: { color: '#555', textDecoration: 'none', fontSize: '0.95rem' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: '4rem 2rem' },
     title: { fontFamily: "'Outfit', sans-serif", fontSize: '2.5rem', fontWeight: 700, marginBottom: '2.5rem' },
@@ -137,12 +171,14 @@ const s = {
     field: { marginBottom: '1rem' },
     label: { display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#555', marginBottom: '0.4rem' },
     input: { width: '100%', padding: '0.6rem 0.9rem', borderRadius: '8px', border: '1.5px solid #e8e5df', fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box' },
-    submitBtn: { width: '100%', padding: '0.9rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginTop: '0.5rem' },
+    submitBtn: { flex: 1, padding: '0.9rem', backgroundColor: '#111', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '0.95rem', fontWeight: 600, cursor: 'pointer' },
+    cancelBtn: { padding: '0.9rem 1.2rem', backgroundColor: '#f8f7f4', color: '#555', border: '1px solid #eee', borderRadius: '10px', fontSize: '0.95rem', cursor: 'pointer' },
     productList: { display: 'flex', flexDirection: 'column', gap: '0.8rem' },
     productItem: { backgroundColor: '#fff', borderRadius: '12px', padding: '1rem', display: 'flex', alignItems: 'center', gap: '1rem', border: '1px solid #eee' },
     productImg: { width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' },
     productInfo: { flex: 1 },
-    productName: { fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.2rem' },
+    productName: { fontWeight: 600, fontSize: '0.95rem', marginBottom: '0.2rem' },
     productMeta: { color: '#888', fontSize: '0.85rem' },
+    editBtn: { background: 'none', border: '1px solid #eee', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' },
     deleteBtn: { background: 'none', border: '1px solid #eee', color: '#ccc', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.9rem' },
 };
