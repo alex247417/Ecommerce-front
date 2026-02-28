@@ -9,6 +9,9 @@ export default function Orders() {
     const success = searchParams.get('success');
 
     useEffect(() => {
+        if (success) {
+            localStorage.removeItem('cart');
+        }
         api.get('/orders/my')
             .then(res => setOrders(res.data))
             .finally(() => setLoading(false));
